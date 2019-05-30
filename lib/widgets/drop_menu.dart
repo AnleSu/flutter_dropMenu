@@ -4,6 +4,7 @@ import 'package:mynavigator/widgets/drop_menu_header.dart';
 import 'package:http/http.dart' as http;
 import 'dart:isolate';
 import 'dart:convert';
+import 'drop_menu_leftWidget.dart';
 
 class DropMenu extends StatefulWidget {
     DropMenu({
@@ -23,7 +24,8 @@ class DropMenu extends StatefulWidget {
 }
 
 class _dropMenuState  extends State<DropMenu> {
-  List leftWidgets = [];
+  List leftWidgets = ["最早预约日期","最晚预约日期","最早完成日期","最晚完成日期"];
+  String leftSelectedStr = '最早完成日期';
   bool leftClick = false;
   bool rightClick = false;
   getProgressDialog() {
@@ -33,34 +35,64 @@ class _dropMenuState  extends State<DropMenu> {
   void initState() {
       super.initState();
 
-      loadData();
+      // loadData();
     }
 
   getBody() {
     if (leftClick) {
-      return getProgressDialog();
-    } else if(rightClick){
-      return getListView();
-    } else {
-      return getListView();
-    }
+        return DropMenuLeftWidget(dataSource: leftWidgets, selectedItem: leftSelectedStr,);
+  
+      } else if(rightClick){
+        return getListView();
+      } else {
+        // return DropMenuLeftWidget(dataSource: leftWidgets);
+      }
   }
   @override
   Widget build(BuildContext context) {
+    
     // TODO: implement build
-    return Column(
+    return NotificationListener(
+      onNotification: (event) {
+        if(event is DropMenuLeftSelectedNoti) {
+          setState(() {
+            leftSelectedStr = (event as DropMenuLeftSelectedNoti).selectedCode;
+          });
+          
+        }
+      },
+      child: Column(
+      mainAxisSize: MainAxisSize.max,
       children: <Widget>[
         DropMenuHeader(
-        height: 44,
-        leftTitle: '最早创建日期',
-        rightTitle: '筛选',
+          height: 44,
+          leftTitle: leftSelectedStr,
+          rightTitle: '筛选',
+          leftTap: () {
+            print('left tap');
+            setState(() {
+              leftClick = !leftClick;
+              if(rightClick == true) {
+                rightClick = false;
+              }
+              getBody();
+            });
+            
+          },
+          rightTap:() {
+
+          },
         ),
         Divider(
           height: 1,
         ),
-        // getBody(),
+        Container(
+          child: getBody(),
+        ),
       ],
+    ),
     );
+    
   }
 
   Widget getRow(int i) {
@@ -112,7 +144,7 @@ class _dropMenuState  extends State<DropMenu> {
      
     List msg = await sendReceiver(sendPort, "https://jsonplaceholder.typicode.com/posts");
     setState(() {
-      // widgets = msg;
+      leftWidgets = msg;
     });
   }
 

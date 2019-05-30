@@ -93,9 +93,9 @@ class _textIconButton extends State<TextIconButton> {
             ],
           ),
           onTap: (){
-            
-            widget.onTap();
+            this.widget.onTap();
             setState(() {
+              
               // widget.dataSelected = !widget.dataSelected;
               widget.selected = !widget.selected;
               if (widget.selected) {
@@ -126,9 +126,7 @@ class _dropMenuHeaderState  extends State<DropMenuHeader> {
         TextIconButton(
           text: widget.leftTitle,
           icon: Image.asset("images/mmc_dropMenu_up_normal@2x.png"),
-          onTap: () {
-            widget.leftTap;
-          },
+          onTap: this.widget.leftTap,
         ),
         Container(
           color: Color(0xFFE5E5E5),
@@ -142,9 +140,7 @@ class _dropMenuHeaderState  extends State<DropMenuHeader> {
          TextIconButton(
           text: widget.rightTitle,
           icon: Image.asset("images/mmc_dropMenu_up_normal@2x.png"),
-          onTap: () {
-            widget.rightTap;
-          },
+          onTap: this.widget.rightTap,
         ),
       ],
     );
