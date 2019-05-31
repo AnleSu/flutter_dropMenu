@@ -76,6 +76,7 @@ class _textIconButton extends State<TextIconButton> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Container(
+        color: Colors.white,
         padding: EdgeInsets.all(0),
         height: 44,
         child: GestureDetector(
@@ -97,7 +98,11 @@ class _textIconButton extends State<TextIconButton> {
                       : Color(0xFF333333),
                 ),
               ),
-              Image(image: AssetImage(imageName),width: 10, height: 10,),
+              Image(
+                image: AssetImage(imageName),
+                width: 10,
+                height: 10,
+              ),
             ],
           ),
         ));
