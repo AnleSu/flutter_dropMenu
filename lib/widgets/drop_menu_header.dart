@@ -12,7 +12,7 @@ class DropMenuHeader extends StatefulWidget {
     this.hasData,
   });
 
-  int height;
+  double height;
   final String leftTitle;
   final String rightTitle;
   final Function leftTap;
@@ -114,7 +114,7 @@ class _dropMenuHeaderState extends State<DropMenuHeader> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Container(
-      height: 45,
+      height: widget.height,
       child: Column(
         children: <Widget>[
           Row(
@@ -141,11 +141,11 @@ class _dropMenuHeaderState extends State<DropMenuHeader> {
               ),
             ],
           ),
-          Container(
-            color: Color(0xFFE5E5E5),
-            width: double.infinity,
-            height: 1,
-          ),
+          // Container( 
+          //   color: Color(0xFFE5E5E5),
+          //   width: double.infinity,
+          //   height: 1,
+          // ),
         ],
       ),
     );
