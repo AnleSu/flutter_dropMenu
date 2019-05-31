@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'dart:isolate';
 import 'dart:convert';
 import 'drop_menu_leftWidget.dart';
+import 'drop_menu_rightWidget.dart';
 
 class DropMenu extends StatefulWidget {
     DropMenu({
@@ -43,7 +44,7 @@ class _dropMenuState  extends State<DropMenu> {
         return DropMenuLeftWidget(dataSource: leftWidgets, selectedItem: leftSelectedStr,);
   
       } else if(rightClick){
-        return getListView();
+        return DropMenuRightWidget();
       } else {
         // return DropMenuLeftWidget(dataSource: leftWidgets);
       }
@@ -80,7 +81,14 @@ class _dropMenuState  extends State<DropMenu> {
             
           },
           rightTap:() {
-
+            print('right tap');
+            setState(() {
+              rightClick = !rightClick;
+              if(leftClick == true) {
+                leftClick = false;
+              }
+              getBody();
+            });
           },
         ),
         Divider(

@@ -20,7 +20,7 @@ class DropMenuHeader extends StatefulWidget {
   bool hasData; //筛选里面是否有选中项
   @override
   _dropMenuHeaderState createState() {
-    // TODO: implement createState
+    // TODO: implement createState 
     return new _dropMenuHeaderState();
   }
 }
@@ -104,20 +104,9 @@ class _textIconButton extends State<TextIconButton> {
             ],
           ),
           onTap: () {
-            
             this.widget.onTap();
             setState(() {
               selected = !selected;
-              // widget.dataSelected = !widget.dataSelected;
-              // if (widget.selected = true) {
-              //   imageName = widget.dataSelected
-              //       ? 'images/mmc_dropMenu_down_red@2x.png'
-              //       : 'images/mmc_dropMenu_down_normal@2x.png';
-              // } else {
-              //   imageName = widget.dataSelected
-              //       ? 'images/mmc_dropMenu_up_red@2x.png'
-              //       : 'images/mmc_dropMenu_up_normal@2x.png';
-              // }
             });
           },
         ),
