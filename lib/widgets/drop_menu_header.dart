@@ -97,49 +97,10 @@ class _textIconButton extends State<TextIconButton> {
                       : Color(0xFF333333),
                 ),
               ),
-              Image(image: AssetImage(imageName)),
+              Image(image: AssetImage(imageName),width: 10, height: 10,),
             ],
           ),
         ));
-    // ClipRRect(
-    //   borderRadius: BorderRadius.circular(widget.radius),
-    //   child: Material(
-    //     elevation: 0.0,
-    //     child: InkWell(
-    //       child: Column(
-    //         children: <Widget>[
-    //           Padding(
-    //             padding: EdgeInsets.only(top: 12),
-    //           ),
-    //           Row(
-    //             children: <Widget>[
-    //               Text(
-    //                 widget.text,
-    //                 style: TextStyle(
-    //                   color: widget.dataSelected
-    //                       ? Color(0xFFF12E49)
-    //                       : Color(0xFF333333),
-    //                 ),
-    //               ),
-    //               Image(image: AssetImage(imageName)),
-    //             ],
-    //           ),
-    //           Padding(
-    //             padding: EdgeInsets.only(bottom: 12),
-    //           ),
-    //         ],
-    //       ),
-    //       onTap: () {
-    //         this.widget.onTap();
-    //         setState(() {
-    //           selected = !selected;
-    //         });
-    //       },
-    //     ),
-    //   ),
-    // );
-
-    // return w;
   }
 }
 
@@ -183,29 +144,5 @@ class _dropMenuHeaderState extends State<DropMenuHeader> {
         ],
       ),
     );
-    // return Row(
-    //   mainAxisSize: MainAxisSize.max,
-    //   children: <Widget>[
-    //     Expanded(
-    //       child: TextIconButton(
-    //         text: widget.leftTitle,
-    //         icon: Image.asset("images/mmc_dropMenu_up_normal@2x.png"),
-    //         onTap: this.widget.leftTap,
-    //       ),
-    //     ),
-    //     Container(
-    //       color: Color(0xFFE5E5E5),
-    //       width: 1,
-    //       height: widget.height.toDouble(),
-    //     ),
-    //     Expanded(
-    //       child: TextIconButton(
-    //         text: widget.rightTitle,
-    //         icon: Image.asset("images/mmc_dropMenu_up_normal@2x.png"),
-    //         onTap: this.widget.rightTap,
-    //       ),
-    //     ),
-    //   ],
-    // );
   }
 }
