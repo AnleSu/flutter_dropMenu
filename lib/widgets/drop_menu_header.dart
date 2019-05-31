@@ -20,7 +20,7 @@ class DropMenuHeader extends StatefulWidget {
   bool hasData; //筛选里面是否有选中项
   @override
   _dropMenuHeaderState createState() {
-    // TODO: implement createState 
+    // TODO: implement createState
     return new _dropMenuHeaderState();
   }
 }
@@ -75,45 +75,71 @@ class _textIconButton extends State<TextIconButton> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    Widget w = ClipRRect(
-      borderRadius: BorderRadius.circular(widget.radius),
-      child: Material(
-        elevation: 0.0,
-        child: InkWell(
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.only(top: 12),
-              ),
-              Row(
-                children: <Widget>[
-                  Text(
-                    widget.text,
-                    style: TextStyle(
-                      color: widget.dataSelected
-                          ? Color(0xFFF12E49)
-                          : Color(0xFF333333),
-                    ),
-                  ),
-                  Image(image: AssetImage(imageName)),
-                ],
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 12),
-              ),
-            ],
-          ),
+    return Container(
+        padding: EdgeInsets.all(0),
+        height: 44,
+        child: GestureDetector(
           onTap: () {
             this.widget.onTap();
             setState(() {
               selected = !selected;
             });
           },
-        ),
-      ),
-    );
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                widget.text,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: widget.dataSelected
+                      ? Color(0xFFF12E49)
+                      : Color(0xFF333333),
+                ),
+              ),
+              Image(image: AssetImage(imageName)),
+            ],
+          ),
+        ));
+    // ClipRRect(
+    //   borderRadius: BorderRadius.circular(widget.radius),
+    //   child: Material(
+    //     elevation: 0.0,
+    //     child: InkWell(
+    //       child: Column(
+    //         children: <Widget>[
+    //           Padding(
+    //             padding: EdgeInsets.only(top: 12),
+    //           ),
+    //           Row(
+    //             children: <Widget>[
+    //               Text(
+    //                 widget.text,
+    //                 style: TextStyle(
+    //                   color: widget.dataSelected
+    //                       ? Color(0xFFF12E49)
+    //                       : Color(0xFF333333),
+    //                 ),
+    //               ),
+    //               Image(image: AssetImage(imageName)),
+    //             ],
+    //           ),
+    //           Padding(
+    //             padding: EdgeInsets.only(bottom: 12),
+    //           ),
+    //         ],
+    //       ),
+    //       onTap: () {
+    //         this.widget.onTap();
+    //         setState(() {
+    //           selected = !selected;
+    //         });
+    //       },
+    //     ),
+    //   ),
+    // );
 
-    return w;
+    // return w;
   }
 }
 
@@ -121,31 +147,65 @@ class _dropMenuHeaderState extends State<DropMenuHeader> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Row(
-      children: <Widget>[
-        Padding(
-          padding: EdgeInsets.only(left: 44, top: 12),
-        ),
-        TextIconButton(
-          text: widget.leftTitle,
-          icon: Image.asset("images/mmc_dropMenu_up_normal@2x.png"),
-          onTap: this.widget.leftTap,
-        ),
-        Container(
-          color: Color(0xFFE5E5E5),
-          width: 1,
-          height: widget.height.toDouble(),
-          margin: EdgeInsets.only(left: 44, top: 0, right: 67),
-        ),
-        // Padding(
-        //         padding: EdgeInsets.only(left: 112, top: 13),
-        //       ),
-        TextIconButton(
-          text: widget.rightTitle,
-          icon: Image.asset("images/mmc_dropMenu_up_normal@2x.png"),
-          onTap: this.widget.rightTap,
-        ),
-      ],
+    return Container(
+      height: 45,
+      child: Column(
+        children: <Widget>[
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              Expanded(
+                child: TextIconButton(
+                  text: widget.leftTitle,
+                  icon: Image.asset("images/mmc_dropMenu_up_normal@2x.png"),
+                  onTap: this.widget.leftTap,
+                ),
+              ),
+              Container(
+                color: Color(0xFFE5E5E5),
+                width: 1,
+                height: widget.height.toDouble(),
+              ),
+              Expanded(
+                child: TextIconButton(
+                  text: widget.rightTitle,
+                  icon: Image.asset("images/mmc_dropMenu_up_normal@2x.png"),
+                  onTap: this.widget.rightTap,
+                ),
+              ),
+            ],
+          ),
+          Container(
+            color: Color(0xFFE5E5E5),
+            width: double.infinity,
+            height: 1,
+          ),
+        ],
+      ),
     );
+    // return Row(
+    //   mainAxisSize: MainAxisSize.max,
+    //   children: <Widget>[
+    //     Expanded(
+    //       child: TextIconButton(
+    //         text: widget.leftTitle,
+    //         icon: Image.asset("images/mmc_dropMenu_up_normal@2x.png"),
+    //         onTap: this.widget.leftTap,
+    //       ),
+    //     ),
+    //     Container(
+    //       color: Color(0xFFE5E5E5),
+    //       width: 1,
+    //       height: widget.height.toDouble(),
+    //     ),
+    //     Expanded(
+    //       child: TextIconButton(
+    //         text: widget.rightTitle,
+    //         icon: Image.asset("images/mmc_dropMenu_up_normal@2x.png"),
+    //         onTap: this.widget.rightTap,
+    //       ),
+    //     ),
+    //   ],
+    // );
   }
 }

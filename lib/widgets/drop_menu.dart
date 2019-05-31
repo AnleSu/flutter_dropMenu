@@ -29,9 +29,6 @@ class _dropMenuState  extends State<DropMenu> {
   String leftSelectedStr = '最早完成日期';
   bool leftClick = false;
   bool rightClick = false;
-  getProgressDialog() {
-    return Center(child: CircularProgressIndicator());
-  }
 
   void initState() {
       super.initState();
@@ -62,12 +59,9 @@ class _dropMenuState  extends State<DropMenu> {
           
         }
       },
-      child: Column(
-      mainAxisSize: MainAxisSize.max,
-      children: <Widget>[
-        DropMenuHeader(
-          height: 44,
-          leftTitle: leftSelectedStr,
+      child: DropMenuHeader(
+        height: 44,
+        leftTitle: leftSelectedStr,
           rightTitle: '筛选',
           leftTap: () {
             print('left tap');
@@ -91,14 +85,43 @@ class _dropMenuState  extends State<DropMenu> {
             });
           },
         ),
-        Divider(
-          height: 1,
-        ),
-        Container(
-          child: getBody(),
-        ),
-      ],
-    ),
+    //   Column(
+    //   mainAxisSize: MainAxisSize.max,
+    //   children: <Widget>[
+    //     DropMenuHeader(
+    //       height: 44,
+    //       leftTitle: leftSelectedStr,
+    //       rightTitle: '筛选',
+    //       leftTap: () {
+    //         print('left tap');
+    //         setState(() {
+    //           leftClick = !leftClick;
+    //           if(rightClick == true) {
+    //             rightClick = false;
+    //           }
+    //           getBody();
+    //         });
+            
+    //       },
+    //       rightTap:() {
+    //         print('right tap');
+    //         setState(() {
+    //           rightClick = !rightClick;
+    //           if(leftClick == true) {
+    //             leftClick = false;
+    //           }
+    //           getBody();
+    //         });
+    //       },
+    //     ),
+    //     Divider(
+    //       height: 1,
+    //     ),
+    //     Container(
+    //       child: getBody(),
+    //     ),
+    //   ],
+    // ),
     );
     
   }

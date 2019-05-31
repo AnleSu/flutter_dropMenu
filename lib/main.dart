@@ -69,11 +69,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   
   List widgets = [];
-  @override
   
-
-  
-
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -91,9 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // body: ListView(
       //   children: _getListData(),
       // ),
-      body: DropMenu(
-        
-      ),
+      body: DropMenu(),
       // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
