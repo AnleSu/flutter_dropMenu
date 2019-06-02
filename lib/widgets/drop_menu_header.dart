@@ -1,8 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'drop_menu_leftWidget.dart';
 
-class DropMenuHeader extends StatefulWidget {
+typedef FilterBarCallback = void Function(bool isSelected);
+
+class DropMenuHeader extends StatefulWidget implements PreferredSizeWidget {
   DropMenuHeader({
     @required this.height,
     @required this.leftTitle,
@@ -10,14 +13,20 @@ class DropMenuHeader extends StatefulWidget {
     this.leftTap,
     this.rightTap,
     this.hasData,
+    this.onPressedFilter,
+    this.onPressedSort,
   });
 
   double height;
-  final String leftTitle;
+  String leftTitle;
   final String rightTitle;
   final Function leftTap;
   final Function rightTap;
   bool hasData; //筛选里面是否有选中项
+  final FilterBarCallback onPressedSort;
+  final FilterBarCallback onPressedFilter;
+  Size get preferredSize => Size.fromHeight(height);
+
   @override
   _dropMenuHeaderState createState() {
     // TODO: implement createState
@@ -26,7 +35,6 @@ class DropMenuHeader extends StatefulWidget {
 }
 
 class TextIconButton extends StatefulWidget {
-  final Image icon;
   final String text;
   final Function onTap;
   final Color normalColor;
@@ -37,7 +45,6 @@ class TextIconButton extends StatefulWidget {
 
   TextIconButton({
     Key key,
-    this.icon,
     this.text,
     this.onTap,
     this.normalColor,
@@ -96,6 +103,7 @@ class _textIconButton extends State<TextIconButton> {
                   color: widget.dataSelected
                       ? Color(0xFFF12E49)
                       : Color(0xFF333333),
+                  fontSize: 14,
                 ),
               ),
               Image(
@@ -110,43 +118,53 @@ class _textIconButton extends State<TextIconButton> {
 }
 
 class _dropMenuHeaderState extends State<DropMenuHeader> {
+  bool sortSelected = false;
+  bool filterSelected = false;
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Container(
-      height: widget.height,
-      child: Column(
-        children: <Widget>[
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              Expanded(
-                child: TextIconButton(
-                  text: widget.leftTitle,
-                  icon: Image.asset("images/mmc_dropMenu_up_normal@2x.png"),
-                  onTap: this.widget.leftTap,
+    return NotificationListener(
+      onNotification: (event) {
+        if (event is DropMenuLeftSelectedNoti) {
+          setState(() {
+            widget.leftTitle = (event as DropMenuLeftSelectedNoti).selectedCode;
+          });
+        }
+      },
+      child: Container(
+        height: widget.height,
+        child: Column(
+          children: <Widget>[
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                Expanded(
+                  child: TextIconButton(
+                    
+                      text: widget.leftTitle,
+                      onTap: () {
+                        this.widget.leftTap;
+                        this.widget.onPressedSort(!sortSelected);
+                      }),
                 ),
-              ),
-              Container(
-                color: Color(0xFFE5E5E5),
-                width: 1,
-                height: widget.height.toDouble(),
-              ),
-              Expanded(
-                child: TextIconButton(
-                  text: widget.rightTitle,
-                  icon: Image.asset("images/mmc_dropMenu_up_normal@2x.png"),
-                  onTap: this.widget.rightTap,
+                Container(
+                  color: Color(0xFFE5E5E5),
+                  width: 1,
+                  height: widget.height.toDouble(),
                 ),
-              ),
-            ],
-          ),
-          // Container( 
-          //   color: Color(0xFFE5E5E5),
-          //   width: double.infinity,
-          //   height: 1,
-          // ),
-        ],
+                Expanded(
+                  child: TextIconButton(
+                      text: widget.rightTitle,
+                      onTap: () {
+                        this.widget.rightTap;
+                        this.widget.onPressedFilter(!filterSelected);
+                      }),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

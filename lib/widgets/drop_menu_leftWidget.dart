@@ -1,13 +1,17 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 
+typedef DropMenuLeftCallback = void Function(String selectedItem, String paramCode);
+
 class DropMenuLeftWidget extends StatefulWidget {
   List dataSource = [];
   String selectedItem;
+  final DropMenuLeftCallback onSelected;
   DropMenuLeftWidget({
     Key key,
     this.dataSource,
     this.selectedItem,
+    this.onSelected,
   }) : super(key: key);
 
   @override
@@ -28,6 +32,7 @@ class _dropMenuLeftWidgetState extends State<DropMenuLeftWidget> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Container(
+      color: Colors.white,
       height: 300,
       child: (getListView()),
     );
@@ -48,14 +53,17 @@ class _dropMenuLeftWidgetState extends State<DropMenuLeftWidget> {
         setState(() {
           widget.selectedItem = widget.dataSource[i];
           DropMenuLeftSelectedNoti(widget.dataSource[i], widget.dataSource[i]).dispatch(context);
+          widget.onSelected(widget.dataSource[i], widget.dataSource[i]);
         });
         
       },
       child: new Column(
+        
         children: <Widget>[
           Padding(
-              padding: EdgeInsets.only(left: 30, top: 15),
+              padding: EdgeInsets.only(left: 30,),
               child: (ListTile(
+                  
                   title: Text("${widget.dataSource[i]}"),
                   trailing: getTrailing(widget.dataSource[i])))),
           Divider(

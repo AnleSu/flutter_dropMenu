@@ -4,6 +4,9 @@
 import 'package:flutter/material.dart';
 import 'dart:core';
 import 'widgets/drop_menu.dart';
+import 'widgets/drop_menu_leftWidget.dart';
+import 'widgets/drop_menu_rightWidget.dart';
+import 'widgets/drop_menu_header.dart';
 
 void main() => runApp(MyApp());
 
@@ -68,8 +71,20 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   
-  List widgets = [];
   
+  bool _showPop = false;
+  bool _showFilter = false;
+  bool _showSort = false;
+
+  List leftWidgets = ["最早预约日期", "最晚预约日期", "最早完成日期", "最晚完成日期"];
+  String leftSelectedStr = '最早完成日期';
+
+  void _showPopView() {
+    setState(() {
+      _showPop = !_showPop;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -83,13 +98,65 @@ class _MyHomePageState extends State<MyHomePage> {
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
-        bottom: DropMenu(),
+        bottom: DropMenuHeader(
+          height: 44,
+          leftTitle: '最早创建日期',
+          rightTitle: '筛选',
+          onPressedFilter: (bool selected) {
+            _showFilter = selected;
+            _showPopView();
+          },
+          onPressedSort: (bool selected) {
+            _showSort = selected;
+            _showPopView();
+          },
+        ),
       ),
-      // body: ListView(
-      //   children: _getListData(),
-      // ),
+      body: _showPop ? 
+        Stack(
+          children: <Widget>[
+            buildBody(),
+            Positioned(
+              child: GestureDetector(
+                onTap: () {
+                  _showPopView();
+                },
+                child: Container(
+                color: Colors.black.withAlpha(70),
+              ),
+              ),
+              
+            ),
+            buildPopView(),
+          ],
+        ) : buildBody(),
       // body: DropMenu(),
       // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+
+  Widget buildPopView() {
+    if (_showFilter) {
+      return DropMenuRightWidget();
+    } else if (_showSort){
+      return DropMenuLeftWidget(
+        dataSource: leftWidgets,
+        selectedItem: leftSelectedStr,
+        onSelected: (String selectedItem, String paramCode) {
+        
+          DropMenuLeftSelectedNoti(selectedItem, paramCode).dispatch(context);
+        },
+      );
+    } else {
+      return null;
+    }
+  }
+
+  Widget buildBody() {
+    return Center(
+      child: Text(
+        '这里放试驾单列表以及请求错误的失败页面以及无数据的空页面'
+      )
     );
   }
 
