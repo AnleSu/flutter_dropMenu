@@ -24,11 +24,13 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
+  json_annotation: ^1.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  json_serializable: ^1.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
@@ -48,6 +50,7 @@ flutter:
    - images/mmc_dropMenu_down_normal@2x.png
    - images/mmc_dropMenu_up_red@2x.png
    - images/mmc_dropMenu_down_red@2x.png
+   - assets/searchParam.json
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 

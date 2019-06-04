@@ -1,14 +1,31 @@
-
-
 // import 'package:flutter/cupertino.dart' as prefix0;
 import 'package:flutter/material.dart';
 import 'dart:core';
+import 'dart:convert';
 import 'widgets/drop_menu.dart';
 import 'widgets/drop_menu_leftWidget.dart';
 import 'widgets/drop_menu_rightWidget.dart';
 import 'widgets/drop_menu_header.dart';
+import 'dart:async' show Future;
+import 'package:flutter/services.dart' show rootBundle;
+import 'dart:async';
+import 'package:mynavigator/model/SearchParamModel.dart';
 
-void main() => runApp(MyApp());
+Future<String> _loadAStudentAsset(BuildContext context) async {
+  return await DefaultAssetBundle.of(context)
+      .loadString('assets/searchParam.json');
+}
+
+Future loadStudent(BuildContext context) async {
+  String jsonString = await _loadAStudentAsset(context);
+  final jsonResponse = json.decode(jsonString);
+  SearchParamList paramList = new SearchParamList.fromJson(jsonResponse);
+  return paramList;
+}
+
+void main() {
+  runApp(new MyApp());
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -30,7 +47,7 @@ class MyApp extends StatelessWidget {
       ),
       home: MyHomePage(title: 'Flutter Demo Home Page'),
       routes: {
-        "new_router":(context)=>NewRoute(),
+        "new_router": (context) => NewRoute(),
       },
     );
   }
@@ -70,8 +87,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  
-  
   bool _showPop = false;
   bool _showFilter = false;
   bool _showSort = false;
@@ -104,32 +119,34 @@ class _MyHomePageState extends State<MyHomePage> {
           rightTitle: '筛选',
           onPressedFilter: (bool selected) {
             _showFilter = selected;
+            _showSort = false;
             _showPopView();
           },
           onPressedSort: (bool selected) {
             _showSort = selected;
+            _showFilter = false;
             _showPopView();
           },
         ),
       ),
-      body: _showPop ? 
-        Stack(
-          children: <Widget>[
-            buildBody(),
-            Positioned(
-              child: GestureDetector(
-                onTap: () {
-                  _showPopView();
-                },
-                child: Container(
-                color: Colors.black.withAlpha(70),
-              ),
-              ),
-              
-            ),
-            buildPopView(),
-          ],
-        ) : buildBody(),
+      body: _showPop
+          ? Stack(
+              children: <Widget>[
+                buildBody(),
+                Positioned(
+                  child: GestureDetector(
+                    onTap: () {
+                      _showPopView();
+                    },
+                    child: Container(
+                      color: Colors.black.withAlpha(70),
+                    ),
+                  ),
+                ),
+                buildPopView(),
+              ],
+            )
+          : buildBody(),
       // body: DropMenu(),
       // This trailing comma makes auto-formatting nicer for build methods.
     );
@@ -137,13 +154,23 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget buildPopView() {
     if (_showFilter) {
-      return DropMenuRightWidget();
-    } else if (_showSort){
+      return FutureBuilder (
+        future: loadStudent(context),
+        builder:(BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.hasData ) {
+            return DropMenuRightWidget(
+              paramList: snapshot,
+            );
+          } else {
+            return Text("data error");
+          }
+        },
+      );
+    } else if (_showSort) {
       return DropMenuLeftWidget(
         dataSource: leftWidgets,
         selectedItem: leftSelectedStr,
         onSelected: (String selectedItem, String paramCode) {
-        
           DropMenuLeftSelectedNoti(selectedItem, paramCode).dispatch(context);
         },
       );
@@ -153,11 +180,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget buildBody() {
-    return Center(
-      child: Text(
-        '这里放试驾单列表以及请求错误的失败页面以及无数据的空页面'
-      )
-    );
+    return Center(child: Text('这里放试驾单列表以及请求错误的失败页面以及无数据的空页面'));
   }
-
 }

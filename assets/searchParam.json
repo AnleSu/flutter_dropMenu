@@ -1,0 +1,92 @@
+[
+    {
+      "dateFlag": false,
+      "itemList": [
+        {
+          "code": "100",
+          "name": "已预约"
+        },
+        {
+          "code": "200",
+          "name": "试驾中"
+        },
+        {
+          "code": "800",
+          "name": "已完成"
+        },
+        {
+          "code": "900",
+          "name": "已取消"
+        }
+      ],
+      "multiFlag": true,
+      "paramCode": "orderStatus",
+      "paramName": "状态",
+      "dateSelectorType": 0,
+      "defaultVal": ""
+    },
+    {
+      "dateFlag": false,
+      "itemList": [
+        {
+          "code": "1",
+          "name": "仅看本人"
+        }
+        
+      ],
+      "multiFlag": false,
+      "paramCode": "receptionEmpSelf",
+      "paramName": "接待人",
+      "dateSelectorType": 1,
+      "defaultVal": ""
+    },
+    {
+      "dateFlag": false,
+      "itemList": [
+        {
+          "code": "2019-06-04 00:00:00|2019-06-04 23:59:59",
+          "name": "今天"
+        },
+        {
+          "code": "2019-06-02 00:00:00|2019-06-04 23:59:59",
+          "name": "近3天"
+        },
+        {
+          "code": "2019-05-29 00:00:00|2019-06-04 23:59:59",
+          "name": "近7天"
+        }
+       
+      ],
+      "multiFlag": false,
+      "paramCode": "finishStartTime",
+      "paramName": "试驾完成日期",
+      "dateSelectorType": 1,
+      "defaultVal": ""
+    },
+    {
+      "dateFlag": true,
+      "itemList": [
+        {
+          "code": "0",
+          "name": "待完善"
+        },
+        {
+          "code": "0",
+          "name": "待完善"
+        },
+        {
+          "code": "0",
+          "name": "待完善"
+        },
+        {
+          "code": "0",
+          "name": "待完善"
+        }
+      ],
+      "multiFlag": false,
+      "paramCode": "createStartTime",
+      "paramName": "试驾完成日期",
+      "dateSelectorType": 1,
+      "defaultVal": ""
+    }
+  ]

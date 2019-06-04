@@ -15,6 +15,8 @@ class DropMenuHeader extends StatefulWidget implements PreferredSizeWidget {
     this.hasData,
     this.onPressedFilter,
     this.onPressedSort,
+    this.sortSelected = false,
+    this.filterSelected = false,
   });
 
   double height;
@@ -23,6 +25,8 @@ class DropMenuHeader extends StatefulWidget implements PreferredSizeWidget {
   final Function leftTap;
   final Function rightTap;
   bool hasData; //筛选里面是否有选中项
+  bool sortSelected;
+  bool filterSelected;
   final FilterBarCallback onPressedSort;
   final FilterBarCallback onPressedFilter;
   Size get preferredSize => Size.fromHeight(height);
@@ -39,45 +43,62 @@ class TextIconButton extends StatefulWidget {
   final Function onTap;
   final Color normalColor;
   final Color selectedColor;
-  // bool selected;
+  bool selected;
   bool dataSelected;
   final double radius;
-
+  Function changeButtonState;
+  
   TextIconButton({
     Key key,
     this.text,
     this.onTap,
     this.normalColor,
     this.selectedColor,
-    // this.selected: false,
+    this.selected: false,
     this.radius = 0.0,
-    this.dataSelected: false,
+    this.dataSelected: false,    
+    this.changeButtonState,
   }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return new _textIconButton();
+    return new _textIconButtonState();
   }
 }
 
-class _textIconButton extends State<TextIconButton> {
+class _textIconButtonState extends State<TextIconButton> {
   String imageName = 'images/mmc_dropMenu_up_normal@2x.png';
-  bool selected = false;
   @override
   void setState(fn) {
     // TODO: implement setState
     super.setState(fn);
-    if (selected == true) {
-      imageName = widget.dataSelected
-          ? 'images/mmc_dropMenu_down_red@2x.png'
-          : 'images/mmc_dropMenu_down_normal@2x.png';
-    } else {
-      imageName = widget.dataSelected
-          ? 'images/mmc_dropMenu_up_red@2x.png'
-          : 'images/mmc_dropMenu_up_normal@2x.png';
-    }
+    if (widget.selected == true) {
+        imageName = widget.dataSelected
+            ? 'images/mmc_dropMenu_down_red@2x.png'
+            : 'images/mmc_dropMenu_down_normal@2x.png';
+      } else {
+        imageName = widget.dataSelected
+            ? 'images/mmc_dropMenu_up_red@2x.png'
+            : 'images/mmc_dropMenu_up_normal@2x.png';
+      }
   }
+
+  void changeButtonState() {
+    setState(() {
+      if (widget.selected == true) {
+        imageName = widget.dataSelected
+            ? 'images/mmc_dropMenu_down_red@2x.png'
+            : 'images/mmc_dropMenu_down_normal@2x.png';
+      } else {
+        imageName = widget.dataSelected
+            ? 'images/mmc_dropMenu_up_red@2x.png'
+            : 'images/mmc_dropMenu_up_normal@2x.png';
+      }
+    });
+  }
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -88,10 +109,10 @@ class _textIconButton extends State<TextIconButton> {
         height: 44,
         child: GestureDetector(
           onTap: () {
-            this.widget.onTap();
-            setState(() {
-              selected = !selected;
-            });
+            widget.selected = !widget.selected;
+            this.widget.onTap() ;
+            
+            changeButtonState();
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -118,9 +139,13 @@ class _textIconButton extends State<TextIconButton> {
 }
 
 class _dropMenuHeaderState extends State<DropMenuHeader> {
-  bool sortSelected = false;
-  bool filterSelected = false;
+  
+  void updateSortState () {
+    setState(() {
+        widget.sortSelected = false;
 
+    });
+  }
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -141,11 +166,12 @@ class _dropMenuHeaderState extends State<DropMenuHeader> {
               children: <Widget>[
                 Expanded(
                   child: TextIconButton(
-                    
                       text: widget.leftTitle,
+                      selected: widget.sortSelected,
                       onTap: () {
-                        this.widget.leftTap;
-                        this.widget.onPressedSort(!sortSelected);
+                        widget.filterSelected = false;
+                        
+                        this.widget.onPressedSort(!widget.sortSelected);
                       }),
                 ),
                 Container(
@@ -156,9 +182,11 @@ class _dropMenuHeaderState extends State<DropMenuHeader> {
                 Expanded(
                   child: TextIconButton(
                       text: widget.rightTitle,
+                      selected: widget.filterSelected,
                       onTap: () {
-                        this.widget.rightTap;
-                        this.widget.onPressedFilter(!filterSelected);
+                        widget.sortSelected = false;
+                        this.widget.onPressedFilter(!widget.filterSelected);
+                        updateSortState();
                       }),
                 ),
               ],
