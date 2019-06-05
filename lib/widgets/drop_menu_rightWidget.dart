@@ -63,36 +63,39 @@ class _dropMenuRightWidgetState extends State<DropMenuRightWidget> {
 
   Widget buildItem(SearchParamModel model) {
     return Column(
-      
       children: <Widget>[
         buildTitle(model.paramName),
         Container(
           child: Wrap(
-          alignment: WrapAlignment.start,
-          runSpacing: 10,
-          spacing: 16,
-          
-          children: List.generate(model.itemList.length, (i) {
-            ParamItemModel item = model.itemList[i];
-            if (item.name == "自定义时间") {
-              return Container(
-                
-                width: double.infinity,
-                padding: EdgeInsets.only(left: 0, right: 20, top: 0, bottom: 0),
-                child: Row(
-                  children: <Widget>[
-                    Expanded(child: buildButton(item.name, null)),
-                    FlatButton(onPressed: null, child: Text('清空'))
-                  ],
-                ),
-              );
-            } else {
-              return buildButton(model.itemList[i].name, null);
-            }
-          }),
+            alignment: WrapAlignment.start,
+            runSpacing: 10,
+            spacing: 16,
+            children: List.generate(model.itemList.length, (i) {
+              ParamItemModel item = model.itemList[i];
+              if (item.name == "自定义时间") {
+                return Container(
+                  width: double.infinity,
+                  padding:
+                      EdgeInsets.only(left: 0, right: 20, top: 0, bottom: 0),
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(child: buildButton(item.name, null)),
+                      FlatButton(
+                          onPressed: null,
+                          child: Text(
+                            '清空',
+                            style: TextStyle(
+                                fontSize: 14, color: Color(0xff4A90E2)),
+                          ))
+                    ],
+                  ),
+                );
+              } else {
+                return buildButton(model.itemList[i].name, null);
+              }
+            }),
+          ),
         ),
-        ),
-        
       ],
     );
   }
@@ -105,6 +108,7 @@ class _dropMenuRightWidgetState extends State<DropMenuRightWidget> {
       child: Column(
         children: <Widget>[
           ListView(
+            shrinkWrap: true,
             padding: EdgeInsets.only(left: 30, top: 9, right: 30),
             children: List.generate(
                 data.list.length,
@@ -112,11 +116,67 @@ class _dropMenuRightWidgetState extends State<DropMenuRightWidget> {
                       child: buildItem(data.list[i]),
                     )),
           ),
-          // Container(
-          //   height: 1,
-          //   color: Colors.grey,
-          //   margin: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
-          // ),
+          Container(
+            height: 1,
+            color: Color(0xfff0f0f0),
+            margin: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
+          ),
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.only(left: 30, right: 30, bottom: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Expanded(
+                    child: Container(
+                  height: 42,
+                  child: FlatButton(
+                      padding: EdgeInsets.all(0),
+                      onPressed: () {
+                        setState(() {
+                          // selected = !selected;
+                        });
+
+                        // onPressed ?? onPressed();
+                      },
+                      child: Text(
+                        "重置",
+                        style:
+                            TextStyle(color: Color(0xFF666666), fontSize: 16),
+                      )),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(6)),
+                      border: Border.all(color: Color(0xFFDDDDDD), width: 1)),
+                )),
+                Container(
+                  width: 11,
+                ),
+                Expanded(
+                    child: Container(
+                  height: 42,
+                  child: FlatButton(
+                      padding: EdgeInsets.all(0),
+                      onPressed: () {
+                        setState(() {
+                          // selected = !selected;
+                        });
+
+                        // onPressed ?? onPressed();
+                      },
+                      child: Text(
+                        "查看xxx个结果",
+                        style:
+                            TextStyle(color: Color(0xFFFFFFFF), fontSize: 16),
+                      )),
+                  decoration: BoxDecoration(
+                      color: Color(0xFFF12E49),
+                      borderRadius: BorderRadius.all(Radius.circular(6)),
+                  ),
+                )),
+              ],
+            ),
+          ),
         ],
       ),
     );
