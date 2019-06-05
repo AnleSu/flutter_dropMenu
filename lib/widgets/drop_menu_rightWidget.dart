@@ -2,15 +2,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:mynavigator/model/SearchParamModel.dart';
 
-
-
 class DropMenuRightWidget extends StatefulWidget {
   final AsyncSnapshot paramList;
   DropMenuRightWidget({
     this.paramList,
   });
-  
-  
+
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -19,11 +16,14 @@ class DropMenuRightWidget extends StatefulWidget {
 }
 
 class _dropMenuRightWidgetState extends State<DropMenuRightWidget> {
-  
-  
   @override
-  Widget buildButton(String title, VoidCallback onPressed,
-      {bgColor = Colors.white, Color titleColor, double height = 32,}) {
+  Widget buildButton(
+    String title,
+    VoidCallback onPressed, {
+    bgColor = Colors.white,
+    Color titleColor,
+    double height = 32,
+  }) {
     titleColor = titleColor ?? Color(0xFF333333);
     bool selected = false;
     return Container(
@@ -35,7 +35,7 @@ class _dropMenuRightWidgetState extends State<DropMenuRightWidget> {
             setState(() {
               selected = !selected;
             });
-            
+
             onPressed ?? onPressed();
           },
           child: Text(
@@ -46,7 +46,9 @@ class _dropMenuRightWidgetState extends State<DropMenuRightWidget> {
       decoration: BoxDecoration(
           color: bgColor,
           borderRadius: BorderRadius.all(Radius.circular(5)),
-          border: Border.all(color: selected ? Color(0xFFF12E49) : Color(0xFFDDDDDD), width: 1)),
+          border: Border.all(
+              color: selected ? Color(0xFFF12E49) : Color(0xFFDDDDDD),
+              width: 1)),
     );
   }
 
@@ -61,36 +63,64 @@ class _dropMenuRightWidgetState extends State<DropMenuRightWidget> {
 
   Widget buildItem(SearchParamModel model) {
     return Column(
+      
       children: <Widget>[
         buildTitle(model.paramName),
-        Wrap(
-          alignment: WrapAlignment.spaceBetween,
+        Container(
+          child: Wrap(
+          alignment: WrapAlignment.start,
           runSpacing: 10,
           spacing: 16,
-          children: List.generate(
-            model.itemList.length, 
-            (i) => buildButton(model.itemList[i].name, null)
-          ),
+          
+          children: List.generate(model.itemList.length, (i) {
+            ParamItemModel item = model.itemList[i];
+            if (item.name == "自定义时间") {
+              return Container(
+                
+                width: double.infinity,
+                padding: EdgeInsets.only(left: 0, right: 20, top: 0, bottom: 0),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(child: buildButton(item.name, null)),
+                    FlatButton(onPressed: null, child: Text('清空'))
+                  ],
+                ),
+              );
+            } else {
+              return buildButton(model.itemList[i].name, null);
+            }
+          }),
         ),
+        ),
+        
       ],
     );
   }
 
   Widget build(BuildContext context) {
     SearchParamList data = widget.paramList.data;
+
     return Container(
       color: Colors.white,
-      child: ListView(
-      padding: EdgeInsets.only(left: 30, top: 9, right: 30),
-      children: List.generate(
-        data.list.length, 
-        (i) => Container(
-          
-          child: buildItem(data.list[i]),
-        )),
-    ),
+      child: Column(
+        children: <Widget>[
+          ListView(
+            padding: EdgeInsets.only(left: 30, top: 9, right: 30),
+            children: List.generate(
+                data.list.length,
+                (i) => Container(
+                      child: buildItem(data.list[i]),
+                    )),
+          ),
+          // Container(
+          //   height: 1,
+          //   color: Colors.grey,
+          //   margin: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
+          // ),
+        ],
+      ),
     );
-    
+
     // TODO: implement build
     // return Positioned(
     //     child: Container(

@@ -8,27 +8,14 @@ typedef FilterBarCallback = void Function(bool isSelected);
 class DropMenuHeader extends StatefulWidget implements PreferredSizeWidget {
   DropMenuHeader({
     @required this.height,
-    @required this.leftTitle,
-    @required this.rightTitle,
-    this.leftTap,
-    this.rightTap,
     this.hasData,
-    this.onPressedFilter,
-    this.onPressedSort,
-    this.sortSelected = false,
-    this.filterSelected = false,
+    this.items,
   });
 
   double height;
-  String leftTitle;
-  final String rightTitle;
-  final Function leftTap;
-  final Function rightTap;
   bool hasData; //筛选里面是否有选中项
-  bool sortSelected;
-  bool filterSelected;
-  final FilterBarCallback onPressedSort;
-  final FilterBarCallback onPressedFilter;
+  final List<ButtonModel> items;
+
   Size get preferredSize => Size.fromHeight(height);
 
   @override
@@ -38,161 +25,116 @@ class DropMenuHeader extends StatefulWidget implements PreferredSizeWidget {
   }
 }
 
-class TextIconButton extends StatefulWidget {
+class ButtonModel {
   final String text;
-  final Function onTap;
   final Color normalColor;
   final Color selectedColor;
-  bool selected;
+  String imageName;
   bool dataSelected;
-  final double radius;
-  Function changeButtonState;
-  
-  TextIconButton({
-    Key key,
-    this.text,
-    this.onTap,
-    this.normalColor,
-    this.selectedColor,
-    this.selected: false,
-    this.radius = 0.0,
-    this.dataSelected: false,    
-    this.changeButtonState,
-  }) : super(key: key);
+  FilterBarCallback onTap;
+  bool isShowDropDownItemWidget;
 
-  @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    return new _textIconButtonState();
-  }
+  ButtonModel(
+      {this.text,
+      this.normalColor,
+      this.selectedColor,
+      this.imageName = "images/mmc_dropMenu_up_normal@2x.png",
+      this.dataSelected = false,
+      this.isShowDropDownItemWidget = false,
+      this.onTap});
 }
 
-class _textIconButtonState extends State<TextIconButton> {
-  String imageName = 'images/mmc_dropMenu_up_normal@2x.png';
-  @override
-  void setState(fn) {
-    // TODO: implement setState
-    super.setState(fn);
-    if (widget.selected == true) {
-        imageName = widget.dataSelected
-            ? 'images/mmc_dropMenu_down_red@2x.png'
-            : 'images/mmc_dropMenu_down_normal@2x.png';
-      } else {
-        imageName = widget.dataSelected
-            ? 'images/mmc_dropMenu_up_red@2x.png'
-            : 'images/mmc_dropMenu_up_normal@2x.png';
-      }
-  }
+class _dropMenuHeaderState extends State<DropMenuHeader> {
+  int _selectedIndex = 999;
 
-  void changeButtonState() {
-    setState(() {
-      if (widget.selected == true) {
-        imageName = widget.dataSelected
-            ? 'images/mmc_dropMenu_down_red@2x.png'
-            : 'images/mmc_dropMenu_down_normal@2x.png';
-      } else {
-        imageName = widget.dataSelected
-            ? 'images/mmc_dropMenu_up_red@2x.png'
-            : 'images/mmc_dropMenu_up_normal@2x.png';
-      }
-    });
-  }
+  _button(ButtonModel buttonModel) {
+    int index = widget.items.indexOf(buttonModel);
 
-  
-
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
     return Container(
         color: Colors.white,
         padding: EdgeInsets.all(0),
         height: 44,
         child: GestureDetector(
           onTap: () {
-            widget.selected = !widget.selected;
-            this.widget.onTap() ;
-            
-            changeButtonState();
+            if (_selectedIndex == index) {
+              _selectedIndex = 999;
+            } else {
+              _selectedIndex = index;
+            }
+            buttonModel.onTap(index == _selectedIndex);
+            // if (_isShowDropDownItemWidget == true) {
+            //   buttonModel.imageName = buttonModel.dataSelected
+            //       ? 'images/mmc_dropMenu_down_red@2x.png'
+            //       : 'images/mmc_dropMenu_down_normal@2x.png';
+            // } else {
+            //   buttonModel.imageName = buttonModel.dataSelected
+            //       ? 'images/mmc_dropMenu_up_red@2x.png'
+            //       : 'images/mmc_dropMenu_up_normal@2x.png';
+            // }
+            setState(() {});
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(
-                widget.text,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: widget.dataSelected
-                      ? Color(0xFFF12E49)
-                      : Color(0xFF333333),
-                  fontSize: 14,
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Flexible(
+                      child: Text(
+                        buttonModel.text,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: buttonModel.dataSelected
+                              ? buttonModel.selectedColor ?? Color(0xFFF12E49)
+                              : buttonModel.normalColor ?? Color(0xFF333333),
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                    Image(
+                      image: AssetImage((index == _selectedIndex) ? 'images/mmc_dropMenu_down_normal@2x.png' : 'images/mmc_dropMenu_up_normal@2x.png'),
+                      width: 10,
+                      height: 10,
+                      color:  buttonModel.dataSelected
+                              ? buttonModel.selectedColor ?? Color(0xFFF12E49)
+                              : buttonModel.normalColor ?? Color(0xFF333333),
+                    ),
+                    index == widget.items.length - 1
+                        ? Container()
+                        : Container(
+                            height: widget.height,
+                            color: Color(0xFFE5E5E5),
+                          )
+                  ],
                 ),
-              ),
-              Image(
-                image: AssetImage(imageName),
-                width: 10,
-                height: 10,
               ),
             ],
           ),
         ));
   }
-}
 
-class _dropMenuHeaderState extends State<DropMenuHeader> {
-  
-  void updateSortState () {
-    setState(() {
-        widget.sortSelected = false;
+  double _screenWidth;
+  double _screenHeight;
+  int _menuCount;
 
-    });
-  }
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return NotificationListener(
-      onNotification: (event) {
-        if (event is DropMenuLeftSelectedNoti) {
-          setState(() {
-            widget.leftTitle = (event as DropMenuLeftSelectedNoti).selectedCode;
-          });
-        }
-      },
-      child: Container(
-        height: widget.height,
-        child: Column(
-          children: <Widget>[
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                Expanded(
-                  child: TextIconButton(
-                      text: widget.leftTitle,
-                      selected: widget.sortSelected,
-                      onTap: () {
-                        widget.filterSelected = false;
-                        
-                        this.widget.onPressedSort(!widget.sortSelected);
-                      }),
-                ),
-                Container(
-                  color: Color(0xFFE5E5E5),
-                  width: 1,
-                  height: widget.height.toDouble(),
-                ),
-                Expanded(
-                  child: TextIconButton(
-                      text: widget.rightTitle,
-                      selected: widget.filterSelected,
-                      onTap: () {
-                        widget.sortSelected = false;
-                        this.widget.onPressedFilter(!widget.filterSelected);
-                        updateSortState();
-                      }),
-                ),
-              ],
-            ),
-          ],
-        ),
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    _screenWidth = mediaQuery.size.width;
+    _screenHeight = mediaQuery.size.height;
+    _menuCount = widget.items.length;
+
+    return Container(
+      height: widget.height,
+      child: GridView.count(
+        crossAxisCount: _menuCount,
+        //子Widget宽高比例
+        childAspectRatio: (_screenWidth / _menuCount) / widget.height,
+        children: widget.items.map<Widget>((item) {
+          return _button(item);
+        }).toList(),
       ),
     );
   }

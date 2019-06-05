@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'dart:core';
 import 'dart:convert';
-import 'widgets/drop_menu.dart';
 import 'widgets/drop_menu_leftWidget.dart';
 import 'widgets/drop_menu_rightWidget.dart';
 import 'widgets/drop_menu_header.dart';
@@ -20,6 +19,14 @@ Future loadStudent(BuildContext context) async {
   String jsonString = await _loadAStudentAsset(context);
   final jsonResponse = json.decode(jsonString);
   SearchParamList paramList = new SearchParamList.fromJson(jsonResponse);
+  for (SearchParamModel item in paramList.list) {
+    if (item.dateFlag == true) {
+      item.itemList.add(new ParamItemModel(
+        name: "自定义时间",
+        code: "-1",
+      ));
+    }
+  }
   return paramList;
 }
 
@@ -91,8 +98,14 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _showFilter = false;
   bool _showSort = false;
 
-  List leftWidgets = ["最早预约日期", "最晚预约日期", "最早完成日期", "最晚完成日期"];
-  String leftSelectedStr = '最早完成日期';
+  static List<SortModel> _leftWidgets = [
+    SortModel(name: "最早预约日期", isSelected: false, code: "1"),
+    SortModel(name: "最晚预约日期", isSelected: true, code: "2"),
+    SortModel(name: "最早完成日期", isSelected: false, code: "5"),
+    SortModel(name: "最晚完成日期", isSelected: false, code: "6")
+  ];
+  SortModel _leftSelectedModel = _leftWidgets[1];
+  List<String> _dropDownHeaderItemStrings = [_leftWidgets[1].name, '筛选'];
 
   void _showPopView() {
     setState(() {
@@ -114,19 +127,24 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
         bottom: DropMenuHeader(
+          items: [
+            ButtonModel(
+                text: _leftSelectedModel.name,
+                onTap: (bool selected) {
+                  _showSort = selected;
+                  _showFilter = false;
+                  
+                  _showPopView();
+                }),
+            ButtonModel(
+                text: _dropDownHeaderItemStrings[1],
+                onTap: (bool selected) {
+                  _showFilter = selected;
+                  _showSort = false;
+                  _showPopView();
+                }),
+          ],
           height: 44,
-          leftTitle: '最早创建日期',
-          rightTitle: '筛选',
-          onPressedFilter: (bool selected) {
-            _showFilter = selected;
-            _showSort = false;
-            _showPopView();
-          },
-          onPressedSort: (bool selected) {
-            _showSort = selected;
-            _showFilter = false;
-            _showPopView();
-          },
         ),
       ),
       body: _showPop
@@ -136,6 +154,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 Positioned(
                   child: GestureDetector(
                     onTap: () {
+                      _showFilter = false;
+                      _showSort = false;
                       _showPopView();
                     },
                     child: Container(
@@ -154,10 +174,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget buildPopView() {
     if (_showFilter) {
-      return FutureBuilder (
+      return FutureBuilder(
         future: loadStudent(context),
-        builder:(BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.hasData ) {
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.hasData) {
             return DropMenuRightWidget(
               paramList: snapshot,
             );
@@ -168,14 +188,17 @@ class _MyHomePageState extends State<MyHomePage> {
       );
     } else if (_showSort) {
       return DropMenuLeftWidget(
-        dataSource: leftWidgets,
-        selectedItem: leftSelectedStr,
-        onSelected: (String selectedItem, String paramCode) {
-          DropMenuLeftSelectedNoti(selectedItem, paramCode).dispatch(context);
+        dataSource: _leftWidgets,
+        onSelected: (SortModel model) {
+          _leftSelectedModel = model;
+          print("select ${model.name}  ${model.code}");
+          setState(() {});
         },
       );
     } else {
-      return null;
+      return SizedBox(
+        height: 0,
+      );
     }
   }
 

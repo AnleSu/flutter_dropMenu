@@ -41,7 +41,7 @@
       "defaultVal": ""
     },
     {
-      "dateFlag": false,
+      "dateFlag": true,
       "itemList": [
         {
           "code": "2019-06-04 00:00:00|2019-06-04 23:59:59",
@@ -68,24 +68,20 @@
       "itemList": [
         {
           "code": "0",
-          "name": "待完善"
+          "name": "今天"
         },
         {
           "code": "0",
-          "name": "待完善"
+          "name": "未来3天"
         },
         {
           "code": "0",
-          "name": "待完善"
-        },
-        {
-          "code": "0",
-          "name": "待完善"
+          "name": "未来7天"
         }
       ],
       "multiFlag": false,
-      "paramCode": "createStartTime",
-      "paramName": "试驾完成日期",
+      "paramCode": "appointmentStartTime",
+      "paramName": "预约进店日期",
       "dateSelectorType": 1,
       "defaultVal": ""
     }
