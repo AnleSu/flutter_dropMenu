@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 
 typedef DropMenuLeftCallback = void Function(SortModel model);
@@ -48,7 +47,7 @@ class _dropMenuLeftWidgetState extends State<DropMenuLeftWidget> {
       return Padding(
         padding: EdgeInsets.only(right: 15),
         child: Image(
-          image: new AssetImage('images/mmc_dropMenu_check_selected@2x.png'),
+          image: new AssetImage('resources/dropMenu_images/mmc_dropMenu_check_selected@2x.png'),
           width: 13,
           height: 10,
           // trailing: Icon(Icons.computer),

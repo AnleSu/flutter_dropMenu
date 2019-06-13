@@ -1,208 +1,34 @@
-// import 'package:flutter/cupertino.dart' as prefix0;
 import 'package:flutter/material.dart';
-import 'dart:core';
-import 'dart:convert';
-import 'widgets/drop_menu_leftWidget.dart';
-import 'widgets/drop_menu_rightWidget.dart';
-import 'widgets/drop_menu_header.dart';
-import 'dart:async' show Future;
-import 'package:flutter/services.dart' show rootBundle;
-import 'dart:async';
-import 'package:mynavigator/model/SearchParamModel.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:mynavigator/widgets/yz_dropmenu_test.dart';
 
-Future<String> _loadAStudentAsset(BuildContext context) async {
-  return await DefaultAssetBundle.of(context)
-      .loadString('assets/searchParam.json');
+main () async {
+  // debugPaintSizeEnabled = true;      //打开视觉调试开关
+  runApp(SALLearnFlutterApp());
+} 
+
+
+class SALLearnFlutterApp extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _sALLearnFlutterAppState();
 }
 
-Future loadStudent(BuildContext context) async {
-  String jsonString = await _loadAStudentAsset(context);
-  final jsonResponse = json.decode(jsonString);
-  SearchParamList paramList = new SearchParamList.fromJson(jsonResponse);
-  for (SearchParamModel item in paramList.list) {
-    if (item.dateFlag == true) {
-      item.itemList.add(new ParamItemModel(
-        name: "自定义时间",
-        code: "-1",
-      ));
-    }
+class _sALLearnFlutterAppState extends State<SALLearnFlutterApp> {
+
+  @override
+  void initState() {
+    super.initState();
+
+    // FlutterBoost.singleton.registerPageBuilders({
+    //   'sample://firstPage': (pageName, params, _) => FirstRouteWidget(),
+    // });
   }
-  return paramList;
-}
 
-void main() {
-  runApp(new MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
-      routes: {
-        "new_router": (context) => NewRoute(),
-      },
+      home: TestPage(),
+      // home: TestPage(),
     );
-  }
-}
-
-class NewRoute extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('new route'),
-      ),
-      body: Center(
-        child: Text('this is a new route'),
-      ),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  bool _showPop = false;
-  bool _showFilter = false;
-  bool _showSort = false;
-
-  static List<SortModel> _leftWidgets = [
-    SortModel(name: "最早预约日期", isSelected: false, code: "1"),
-    SortModel(name: "最晚预约日期", isSelected: true, code: "2"),
-    SortModel(name: "最早完成日期", isSelected: false, code: "5"),
-    SortModel(name: "最晚完成日期", isSelected: false, code: "6")
-  ];
-  SortModel _leftSelectedModel = _leftWidgets[1];
-  List<String> _dropDownHeaderItemStrings = [_leftWidgets[1].name, '筛选'];
-
-  void _showPopView() {
-    setState(() {
-      _showPop = !_showPop;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-        bottom: DropMenuHeader(
-          items: [
-            ButtonModel(
-                text: _leftSelectedModel.name,
-                onTap: (bool selected) {
-                  _showSort = selected;
-                  _showFilter = false;
-                  
-                  _showPopView();
-                }),
-            ButtonModel(
-                text: _dropDownHeaderItemStrings[1],
-                onTap: (bool selected) {
-                  _showFilter = selected;
-                  _showSort = false;
-                  _showPopView();
-                }),
-          ],
-          height: 44,
-        ),
-      ),
-      body: _showPop
-          ? Stack(
-              children: <Widget>[
-                buildBody(),
-                Positioned(
-                  child: GestureDetector(
-                    onTap: () {
-                      _showFilter = false;
-                      _showSort = false;
-                      _showPopView();
-                    },
-                    child: Container(
-                      color: Colors.black.withAlpha(70),
-                    ),
-                  ),
-                ),
-                buildPopView(),
-              ],
-            )
-          : buildBody(),
-      // body: DropMenu(),
-      // This trailing comma makes auto-formatting nicer for build methods.
-    );
-  }
-
-  Widget buildPopView() {
-    if (_showFilter) {
-      return FutureBuilder(
-        future: loadStudent(context),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.hasData) {
-            return DropMenuRightWidget(
-              paramList: snapshot,
-            );
-          } else {
-            return Text("data error");
-          }
-        },
-      );
-    } else if (_showSort) {
-      return DropMenuLeftWidget(
-        dataSource: _leftWidgets,
-        onSelected: (SortModel model) {
-          _leftSelectedModel = model;
-          print("select ${model.name}  ${model.code}");
-          setState(() {});
-        },
-      );
-    } else {
-      return SizedBox(
-        height: 0,
-      );
-    }
-  }
-
-  Widget buildBody() {
-    return Center(child: Text('这里放试驾单列表以及请求错误的失败页面以及无数据的空页面'));
   }
 }

@@ -16,9 +16,11 @@ class SearchParamList {
 class ParamItemModel {
   String name;
   String code;
+  bool isSelected;
   ParamItemModel({
     this.name,
     this.code,
+    this.isSelected = false,
   });
 
   factory ParamItemModel.fromJson(Map<String, dynamic> json){
