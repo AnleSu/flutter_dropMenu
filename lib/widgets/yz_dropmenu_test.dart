@@ -91,7 +91,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     onTap: (bool selected) {
                       _showSort = selected;
                       _showFilter = false;
-
                       _showPopView();
                     }),
                 ButtonModel(
@@ -172,6 +171,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget buildBody() {
-    return Center(child: Text('这里放试驾单列表以及请求错误的失败页面以及无数据的空页面'));
+    return Center(child: Text('这里放列表以及请求错误的失败页面以及无数据的空页面'));
   }
 }
