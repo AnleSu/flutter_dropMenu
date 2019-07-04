@@ -1,16 +1,18 @@
-# mynavigator
+# my_drop_menu
 
-A new Flutter project.
+封装了一个简单的筛选器 效果图如下：
 
-## Getting Started
+- 支持列表式选择
+- 支持流水布局
+- 支持多选单选
+- 动态根据数据布局
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+![image-20190704111913603](http://ww4.sinaimg.cn/large/006tNc79ly1g4nn1mjmt9j30l015u0y6.jpg)
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+![image-20190704111954966](http://ww2.sinaimg.cn/large/006tNc79ly1g4nn2cgj3sj30le1600wl.jpg)
+
+笔记：bloc的使用 数据隔好多层widget传递
+
+TODO:自定义时间 调取日历 还未实现
